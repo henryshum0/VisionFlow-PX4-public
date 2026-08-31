@@ -2,15 +2,7 @@
 
 # VisionFlow-PX4
 
-<a href="https://github.com/Renwang-Huang/VisionFlow-PX4/commits"><img src="https://img.shields.io/badge/Development-Active-22C55E?style=flat-square" alt="Development Status"></a><!--
--->&nbsp;<a href="https://github.com/Renwang-Huang/VisionFlow-PX4/tree/main"><img src="https://img.shields.io/badge/Default%20Branch-main-2563EB?style=flat-square" alt="Default Branch"></a><!--
--->&nbsp;<a href="README_zh.md"><img src="https://img.shields.io/badge/English-中文-E5E7EB?style=flat-square&labelColor=111827" alt="Switch to Chinese"></a>
-
-</div>
-
-> New features, performance improvements, and bug fixes are continuously merged into the `main` branch. Pull the repository regularly to keep your local checkout synchronized with the latest version.
-
-## Overview
+## Overview (THIS BRANCH SWITCHED TO ORIGINAL PX4 CONTROLLERS)
 
 > A customized PX4 Autopilot fork that integrates UAVs with Gamma-series robotic arms for manipulation tasks in Gazebo simulation. It includes Prescribed Performance Guidance and Management Estimator (PreGME) control and ROS 2 integration, with the following features:
 
@@ -29,6 +21,10 @@
 | ros-gz bridge | `ros-humble-ros-gzharmonic` |
 | PX4-Autopilot | V1.17.0 |
 | QGroundControl Download | <https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html> |
+
+> For a step-by-step local installation guide covering the PX4 toolchain,
+> ROS 2 Humble, repository setup, and WSL2 GPU configuration,
+> see [Local Installation Guide](docs/en/getting-started/local-installation.md).
 
 ## Quick Start
 
@@ -51,65 +47,17 @@ ninja -C build/px4_sitl_default -t targets | grep gz_swan_gamma
 
 The following command is recommended for a one-step installation of `ROS 2 Humble`:
 
-```bash
-wget http://fishros.com/install -O fishros && . fishros
-```
-
----
-
-Use the following commands to install `Gazebo Sim Harmonic`:
-
-```bash
-sudo apt update
-
-sudo apt install -y curl lsb-release gnupg
-
-sudo curl https://packages.osrfoundation.org/gazebo.gpg \
-  --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] https://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" \
-  | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-
-sudo apt update
-
-sudo apt install -y gz-harmonic
-```
-
----
-
-Use the following commands to install `ros-humble-ros-gzharmonic`:
-
-```bash
-sudo apt update
-
-sudo apt install ros-humble-ros-gzharmonic
-
-sudo apt install -y ros-humble-ros-gzharmonic-bridge
-```
-
----
-
-Finally, run the official environment setup script to avoid missing dependencies:
-
-```bash
-sudo chmod +x Tools/setup/ubuntu.sh
-
-bash Tools/setup/ubuntu.sh
-```
-
----
-
-The following commands run `PX4 SITL + Gazebo` directly on the local host:
-
-| Profile | Description | Simulation Launch Command |
-|---------|-------------|---------------------------|
-| Entity 1 | PreGME q940_ti model with landing-gear scenario | `PX4_GZ_WORLD=laboratory_landingbox make px4_sitl gz_q940_ti_gripper4_laboratory_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 2 | PreGME q940_ti model with VLA task scenario | `PX4_GZ_WORLD=laboratory_landingbox_vla_task0 make px4_sitl gz_q940_ti_gripper4_laboratory_landingbox_vla_task0 EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 3 | Swan Gamma v1, a legacy company model that is deprecated and no longer maintained | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_swan_gamma_v1_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 4 | Swan Gamma v2, the current company model and preferred simulation platform, in the laboratory scenario | `PX4_GZ_MODEL_POSE="0,0,1.15392,0,0,0" PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_swan_gamma_v2_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 5 | Swan Gamma v2 with VLA task scenario | `PX4_GZ_WORLD=laboratory_no_landingbox_vla_task0 make px4_sitl gz_swan_gamma_v2_laboratory_no_landingbox_vla_task0 EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 6 | Officially supported X500 model with gimbal | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_x500_gimbal_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
-| Entity 7 | Differential-drive rover, planned for deprecation | `PX4_GZ_MODEL_POSE="0,0,0.5,0,0,0" make px4_sitl gz_differential_rover_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Profile | Description | Command |
+|---------|-------------|---------|
+| Entity 1 | PreGME q940_ti with landing box (季梦玉) | `PX4_GZ_WORLD=laboratory_landingbox make px4_sitl gz_q940_ti_gripper4_laboratory_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 2 | PreGME q940_ti with VLA task | `PX4_GZ_WORLD=laboratory_landingbox_vla_task0 make px4_sitl gz_q940_ti_gripper4_laboratory_landingbox_vla_task0 EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 3 | Swan gamma v1 (company legacy) | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_swan_gamma_v1_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 4 | Swan gamma v2 (company new) | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_swan_gamma_v2_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 5 | Swan gamma v2 with VLA task | `PX4_GZ_WORLD=laboratory_no_landingbox_vla_task0 make px4_sitl gz_swan_gamma_v2_laboratory_no_landingbox_vla_task0 EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 6 | X500 with gimbal | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_x500_gimbal_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 6b | X500 with 3D LiDAR | `PX4_GZ_WORLD=laboratory_no_landingbox make px4_sitl gz_x500_lidar_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 7 | Differential drive rover | `PX4_GZ_MODEL_POSE="0,0,0.5,0,0,0" make px4_sitl gz_differential_rover_laboratory_no_landingbox EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
+| Entity 8 | PreGME q940_ti in yungu world | `PX4_GZ_WORLD=yungu make px4_sitl gz_q940_ti_gripper4_yungu EXTRA_CMAKE_ARGS="-DENABLE_LOCKSTEP_SCHEDULER=ON"` |
 
 ### Docker-Based Launch (Recommended)
 
@@ -348,7 +296,8 @@ windshape_dev/
 | `laboratory_no_landingbox_vla_task0.sdf` | VLA task scenario without a landing box |
 | `laboratory_landingbox_hitl.sdf` | Hardware-in-the-loop version |
 | `indoor_dining.sdf` | Indoor dining environment |
-| `baylands_coast.sdf` | Coastal environment |
+| `baylands_coast.sdf` | Baylands coastal environment |
+| `yungu.sdf` | Yungu lab environment (yungu.glb visual + yungu_collider.stl collision) |
 
 ### Models (`Tools/simulation/gz/models/`)
 
@@ -412,6 +361,140 @@ Custom POSIX airframes are located in `ROMFS/px4fmu_common/init.d-posix/airframe
 4. **ROS 2 Integration** — uXRCE-DDS, MAVROS, the Gazebo-ROS bridge, and a complete ROS 2 Humble Docker environment.
 5. **Camera Feedback Pipeline** — Support for OAK-D and Intel RealSense cameras.
 6. **Differential Rover Support** — A complete rover-control stack alongside the quadcopter stack.
+
+## ROS2 Usage
+
+This project uses **ROS2 Humble** as the middleware layer for simulation, offboard control, arm manipulation, visualization, and data streaming. Below are common workflows.
+
+### Prerequisites
+
+Ensure ROS2 Humble is sourced:
+
+```bash
+source /opt/ros/humble/setup.bash
+```
+
+Or using the Docker environment (recommended):
+
+```bash
+bash docker/run_gz_sitl.sh --profile "Entity 1"
+```
+
+### Basic ROS2 Commands
+
+```bash
+# List active topics
+ros2 topic list
+
+# Echo a specific topic (e.g., drone odometry)
+ros2 topic echo /model/q940_ti_0/odometry
+
+# List active nodes
+ros2 node list
+
+# Get node info
+ros2 node info <node_name>
+
+# Call a service (e.g., arm the drone via MAVROS)
+ros2 service call /mavros/cmd/arming mavros_msgs/srv/CommandBool "{value: true}"
+
+# Set OFFBOARD mode
+ros2 service call /mavros/set_mode mavros_msgs/srv/SetMode "{custom_mode: 'OFFBOARD'}"
+
+# List all services
+ros2 service list
+
+# Get parameter from a node
+ros2 param get <node_name> <param_name>
+```
+
+### Offboard Control
+
+Fly the drone via MAVROS:
+
+```bash
+python3 windshape_dev/uav_control/offboard/official_offboard.py
+```
+
+Other offboard scripts:
+
+| Script | Description |
+|--------|-------------|
+| `windshape_dev/uav_control/offboard/official_offboard.py` | Takeoff & hover |
+| `windshape_dev/uav_control/offboard/circular_tracking.py` | Circular trajectory |
+| `windshape_dev/uav_control/offboard/figure-eight_tracking.py` | Figure-8 path with yaw blending |
+
+### Keyboard Control
+
+```bash
+python3 windshape_dev/uav_control/keyboard/keyboard_control.py
+```
+
+### Gazebo ↔ ROS2 Bridge
+
+Bridge simulation data to ROS2 topics:
+
+```bash
+bash windshape_dev/image_stream/bridge_gz_ros.sh
+```
+
+This publishes arm joint states, gripper states, drone odometry, and more to ROS2 topics (see [Topics & Services](#topics--services) below).
+
+### Camera Stream
+
+```bash
+# Start bridge then camera stream
+bash windshape_dev/image_stream/bridge_gz_ros.sh
+bash windshape_dev/image_stream/camera_stream.sh
+```
+
+View at: `http://localhost:8080/`
+
+### Arm Control
+
+Launch the Gamma arm web control interface:
+
+```bash
+bash windshape_dev/arm_control/gamma_arm/gamma_arm_web_control.sh
+```
+
+### Odometry Plotting
+
+Real-time position dashboard:
+
+```bash
+python3 windshape_dev/data_plotting/local_position/odom_plotter.py
+```
+
+### Topics & Services
+
+Key ROS2 topics used in the project:
+
+| Topic | Type | Description |
+|-------|------|-------------|
+| `/mavros/state` | `mavros_msgs/msg/State` | MAVLink connection state |
+| `/mavros/local_position/odom` | `nav_msgs/msg/Odometry` | UAV local odometry |
+| `/mavros/local_position/pose` | `geometry_msgs/msg/PoseStamped` | UAV local pose |
+| `/mavros/setpoint_position/local` | `geometry_msgs/msg/PoseStamped` | OFFBOARD position setpoint |
+| `/mavros/setpoint_velocity/cmd_vel_unstamped` | `geometry_msgs/msg/Twist` | OFFBOARD velocity setpoint |
+| `/mavros/rc/override` | `mavros_msgs/msg/OverrideRCIn` | RC override commands |
+| `/model/q940_ti_0/odometry` | `nav_msgs/msg/Odometry` | Gazebo drone ground truth |
+| `/gamma_arm/joint_states` | `sensor_msgs/msg/JointState` | Gamma arm joint states |
+| `/gripper3/joint_state` | `sensor_msgs/msg/JointState` | Gripper joint state |
+
+Key services:
+
+| Service | Type | Purpose |
+|---------|------|---------|
+| `/mavros/cmd/arming` | `mavros_msgs/srv/CommandBool` | Arm / disarm |
+| `/mavros/set_mode` | `mavros_msgs/srv/SetMode` | Flight mode (e.g., OFFBOARD) |
+
+### Visualizing with RViz2
+
+```bash
+# Load a preconfigured RViz2 setup from the SUPER planner
+rviz2 -d windshape_dev/yungu/src/SUPER/super_planner/rviz/super_planner.rviz
+```
 
 ## Citation
 

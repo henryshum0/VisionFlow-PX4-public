@@ -153,10 +153,6 @@ TODO.md
 
 .playwright-mcp/*
 
-# VitePress docs build tooling (see DOCS_DEPLOYMENT.md)
-docs/node_modules/
-docs/.vitepress/cache/
-docs/.vitepress/.temp/
-
-# VitePress 构建产物（本地 build 时生成，无需入库；见 DOCS_DEPLOYMENT.md）
-/site/
+windshape_dev/yungu
+*.glb
+*.stl
