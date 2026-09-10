@@ -5,6 +5,12 @@
     <self_collide>false</self_collide>
     <enable_wind>false</enable_wind>
 
+    <!--
+      Temporary rigid-arm mode.  The arm stays a dynamic child of the UAV so
+      its mass, inertia, and external collision geometry remain active, but
+      its articulated joints are locked and no arm effort controller runs.
+    -->
+
     <link name="gamma_arm_base_link">
       <inertial>
         <pose>0.026 0 0 0 -0 0</pose>
@@ -66,25 +72,10 @@
       </collision>
     </link>
 
-    <joint name="A" type="revolute">
+    <joint name="A" type="fixed">
       <pose relative_to="gamma_arm_base_link">0.0613 0 0 -0.50 0 0</pose>
       <parent>gamma_arm_base_link</parent>
       <child>A_Link</child>
-      <axis>
-        <xyz>1 0 0</xyz>
-        <limit>
-          <lower>-5.0</lower>
-          <upper>5.0</upper>
-          <effort>180</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="A_Link">
       <pose relative_to="A">0 0 0 0 -0 0</pose>
@@ -150,25 +141,10 @@
       </collision>
     </link>
 
-    <joint name="B" type="revolute">
+    <joint name="B" type="fixed">
       <pose relative_to="A_Link">0.042986 0.03395 0.064067 0 0.72990 0</pose>
       <parent>A_Link</parent>
       <child>B_Link</child>
-      <axis>
-        <xyz>0 -1 0</xyz>
-        <limit>
-          <lower>-3.2</lower>
-          <upper>3.2</upper>
-          <effort>200</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="B_Link">
       <pose relative_to="B">0 0 0 0 -0 0</pose>
@@ -233,25 +209,10 @@
       </collision>
     </link>
 
-    <joint name="C" type="revolute">
+    <joint name="C" type="fixed">
       <pose relative_to="B_Link">-0.16587 -0.057 0.18536 0 -0.87406 0</pose>
       <parent>B_Link</parent>
       <child>C_Link</child>
-      <axis>
-        <xyz>0 -1 0</xyz>
-        <limit>
-          <lower>-3.2</lower>
-          <upper>3.2</upper>
-          <effort>80</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="C_Link">
       <pose relative_to="C">0 0 0 0 -0 0</pose>
@@ -317,25 +278,10 @@
       </collision>
     </link>
 
-    <joint name="D" type="revolute">
+    <joint name="D" type="fixed">
       <pose relative_to="C_Link">0.023891 0.025 0.060208 -1.57080 0.14406 0</pose>
       <parent>C_Link</parent>
       <child>D_Link</child>
-      <axis>
-        <xyz>1 0 0</xyz>
-        <limit>
-          <lower>-3.2</lower>
-          <upper>3.2</upper>
-          <effort>20</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="D_Link">
       <pose relative_to="D">0 0 0 0 -0 0</pose>
@@ -400,25 +346,10 @@
       </collision>
     </link>
 
-    <joint name="E" type="revolute">
+    <joint name="E" type="fixed">
       <pose relative_to="D_Link">0.15 -0.0335 0 0 1.57073 0</pose>
       <parent>D_Link</parent>
       <child>E_Link</child>
-      <axis>
-        <xyz>0 -1 0</xyz>
-        <limit>
-          <lower>-3.2</lower>
-          <upper>3.2</upper>
-          <effort>10</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="E_Link">
       <pose relative_to="E">0 0 0 0 -0 0</pose>
@@ -484,25 +415,10 @@
       </collision>
     </link>
 
-    <joint name="F" type="revolute">
+    <joint name="F" type="fixed">
       <pose relative_to="E_Link">0 0.035 0.084 0 0 0</pose>
       <parent>E_Link</parent>
       <child>F_Link</child>
-      <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-3.2</lower>
-          <upper>3.2</upper>
-          <effort>20</effort>
-          <velocity>3.75</velocity>
-        </limit>
-        <dynamics>
-          <damping>0.5</damping>
-          <friction>0.01</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
     </joint>
     <link name="F_Link">
       <pose relative_to="F">0 0 0 0 -0 0</pose>
@@ -567,6 +483,8 @@
       </collision>
     </link>
 
+    <!-- Fixed joints have no useful articulated state in rigid-arm mode. -->
+    <!--
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>/model/gamma_arm/joint_state</topic>
       <joint_name>A</joint_name>
@@ -576,6 +494,7 @@
       <joint_name>E</joint_name>
       <joint_name>F</joint_name>
     </plugin>
+    -->
 
     <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
       <publish_link_pose>true</publish_link_pose>
@@ -588,6 +507,8 @@
       <update_frequency>100</update_frequency>
     </plugin>
 
+    <!-- Disabled while the arm is rigid: this plugin commands joint efforts. -->
+    <!--
     <plugin filename="libgamma_arm_control.so" name="gamma_arm::GammaArmControlPlugin">
       <joint_name>A</joint_name>
       <joint_name>B</joint_name>
@@ -631,5 +552,6 @@
       <gravity_y>0.0</gravity_y>
       <gravity_z>9.81</gravity_z>
     </plugin>
+    -->
   </model>
 </sdf>
