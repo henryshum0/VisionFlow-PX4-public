@@ -114,7 +114,8 @@
         <topic>/swan_gamma_v2/front_camera/image</topic>
         <gz_frame_id>front_camera_link</gz_frame_id>
         <camera name="front_camera">
-          <horizontal_fov>1.0471975512</horizontal_fov>
+          <!-- 100 degrees, in radians. -->
+          <horizontal_fov>1.7453292520</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
